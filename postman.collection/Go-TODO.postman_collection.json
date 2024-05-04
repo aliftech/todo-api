@@ -1,0 +1,73 @@
+{
+	"info": {
+		"_postman_id": "2ad26f64-c660-4e74-8aaa-298a4b46db19",
+		"name": "Go-TODO",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "17071628"
+	},
+	"item": [
+		{
+			"name": "Create Task",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"Learning Golang\",\r\n    \"description\": \"lorem ipsum dolor sit amet\",\r\n    \"status\": \"not started\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:3000/task"
+			},
+			"response": []
+		},
+		{
+			"name": "Update Task",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"EILTS Preparation\",\r\n    \"description\": \"lorem ipsum dolor sit amet\",\r\n    \"status\": \"not started\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:3000/task/1"
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Tasks",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:3000/task"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Task By ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:3000/task/1"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Task",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": "http://localhost:3000/task/3"
+			},
+			"response": []
+		}
+	]
+}

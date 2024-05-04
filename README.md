@@ -1,6 +1,6 @@
 # Go TODO API
 
-This project is created as a learning case to create a REST-API using go programmming language. This project is contained about a simple CRUD API to create, update, delete, and show a task.
+🚀 Exciting news, folks! Just dropped my latest portfolio update featuring a sleek, efficient todo REST-API built from scratch using the power of Go programming language, along with the dynamic duo of Gin and Gorm frameworks, topped off with CompileDaemon for seamless development. Dive into the world of RESTful APIs with me as I unravel the magic behind crafting this robust solution. Check out the link below for all the juicy details! 💻✨
 
 ## Instalation
 

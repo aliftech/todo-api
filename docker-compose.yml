@@ -20,7 +20,6 @@ services:
       # Where our data will be persisted
     volumes:
       - db_todo:/var/lib/mysql
-# Names our volume
-    
+
 volumes:
   db_todo:

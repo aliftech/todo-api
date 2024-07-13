@@ -8,7 +8,7 @@ ENV GO111MODULE=on
 RUN apk update && apk add --no-cache git
 
 # Set current working directory
-WORKDIR /app
+WORKDIR /todo
 
 # Note here: To avoid downloading dependencies every time we
 # build image. Here, we are caching all the dependencies by
@@ -37,7 +37,9 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o ./bin/main .
 FROM scratch
 
 # Copy the Pre-built binary file
-COPY --from=builder /app/bin/main .
+COPY --from=builder /todo/bin/main .
+# Copy the .env file
+COPY --from=builder /todo/.env .
 
 # Run executable
 CMD ["./main"]

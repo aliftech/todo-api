@@ -45,3 +45,27 @@ But, in this project we are not going to use it. Instead of using `go run` comma
 ```bash
 CompileDaemon -command="./todo-api"
 ```
+
+## DEPLOYMENT
+
+### Installing docker in server
+
+[Setup Docker in GCP](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04)
+
+### Installing Docker compose
+
+```bash
+sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+```
+
+```bash
+sudo chmod +x /usr/local/bin/docker-compose
+```
+
+```bash
+docker-compose --version
+```
+
+```bash
+export PATH="/usr/local/bin:$PATH"
+```

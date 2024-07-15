@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/aliftech/todo-api/controllers"
+	"github.com/aliftech/todo-api/migrations"
 	"github.com/aliftech/todo-api/utils"
 	"github.com/gin-gonic/gin"
 )
@@ -9,6 +10,7 @@ import (
 func init() {
 	utils.Setup()
 	utils.ConnectDB()
+	migrations.TaskMigration()
 }
 
 func main() {

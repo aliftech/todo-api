@@ -1,4 +1,4 @@
-package main
+package migrations
 
 import (
 	"github.com/aliftech/todo-api/models"
@@ -10,6 +10,6 @@ func init() {
 	utils.ConnectDB()
 }
 
-func main() {
+func TaskMigration() {
 	utils.DB.AutoMigrate(&models.Tasks{})
 }

@@ -1,2 +1,2 @@
 PORT=3000
-DB="wahyou:aezakmi321@tcp(127.0.0.1:3306)/todo?charset=utf8mb4&parseTime=True&loc=Local"
+DB="wahyou:aezakmi321@tcp(db:3306)/todo?charset=utf8mb4&parseTime=True&loc=Local"

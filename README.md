@@ -48,24 +48,18 @@ CompileDaemon -command="./todo-api"
 
 ## DEPLOYMENT
 
-### Installing docker in server
-
-[Setup Docker in GCP](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04)
-
-### Installing Docker compose
-
 ```bash
-sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+gcloud auth configure-docker asia-southeast2-docker.pkg.dev
 ```
 
 ```bash
-sudo chmod +x /usr/local/bin/docker-compose
+docker compose -f docker-compose.yml build
 ```
 
 ```bash
-docker-compose --version
+docker tag todoapp asia-southeast2-docker.pkg.dev/todo-429911/todo-api-todo
 ```
 
 ```bash
-export PATH="/usr/local/bin:$PATH"
+docker push asia-southeast2-docker.pkg.dev/todo-429911/todoapp/todo-api-todo
 ```

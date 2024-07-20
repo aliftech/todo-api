@@ -39,7 +39,7 @@ FROM scratch
 # Copy the Pre-built binary file
 COPY --from=builder /todo/bin/main .
 # Copy the .env file
-COPY --from=builder /todo/.env .
+COPY --from=builder /todo/env .env
 
 # Run executable
 CMD ["./main"]

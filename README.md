@@ -46,20 +46,8 @@ But, in this project we are not going to use it. Instead of using `go run` comma
 CompileDaemon -command="./todo-api"
 ```
 
-## DEPLOYMENT
+### Running with Docker
 
 ```bash
-gcloud auth configure-docker asia-southeast2-docker.pkg.dev
-```
-
-```bash
-docker compose -f docker-compose.yml build
-```
-
-```bash
-docker tag todoapp asia-southeast2-docker.pkg.dev/todo-429911/todo-api-todo
-```
-
-```bash
-docker push asia-southeast2-docker.pkg.dev/todo-429911/todoapp/todo-api-todo
+docker compose up
 ```

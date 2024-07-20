@@ -7,67 +7,113 @@
 	},
 	"item": [
 		{
-			"name": "Create Task",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"title\": \"Learning Golang\",\r\n    \"description\": \"lorem ipsum dolor sit amet\",\r\n    \"status\": \"not started\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
+			"name": "Todo",
+			"item": [
+				{
+					"name": "Create Task",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Learning Golang\",\r\n    \"description\": \"lorem ipsum dolor sit amet\",\r\n    \"due\": \"2024-08-23\",\r\n    \"status\": \"not started\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:3000/task"
+					},
+					"response": []
 				},
-				"url": "http://localhost:3000/task"
-			},
-			"response": []
-		},
-		{
-			"name": "Update Task",
-			"request": {
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"title\": \"EILTS Preparation\",\r\n    \"description\": \"lorem ipsum dolor sit amet\",\r\n    \"status\": \"not started\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
+				{
+					"name": "Update Task",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"EILTS Preparation\",\r\n    \"description\": \"lorem ipsum dolor sit amet\",\r\n    \"due\": \"2024-07-30\",\r\n    \"status\": \"not started\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:3000/task/1"
+					},
+					"response": []
 				},
-				"url": "http://localhost:3000/task/1"
-			},
-			"response": []
+				{
+					"name": "Get All Tasks",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:3000/task"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Task By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:3000/task/1"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Task",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "http://localhost:3000/task/3"
+					},
+					"response": []
+				}
+			]
 		},
 		{
-			"name": "Get All Tasks",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": "http://localhost:3000/task"
-			},
-			"response": []
-		},
-		{
-			"name": "Get Task By ID",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": "http://localhost:3000/task/1"
-			},
-			"response": []
-		},
-		{
-			"name": "Delete Task",
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"url": "http://localhost:3000/task/3"
-			},
-			"response": []
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Signup",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"test.signup@gmail.com\",\r\n    \"fullname\": \"Sigma\",\r\n    \"password\": \"kuda123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:3000/signup"
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"test.signup@gmail.com\",\r\n    \"password\": \"kuda123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:3000/login"
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }

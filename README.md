@@ -1,6 +1,8 @@
 # Go TODO API
 
-🚀 Exciting news, folks! Just dropped my latest portfolio update featuring a sleek, efficient todo REST-API built from scratch using the power of Go programming language, along with the dynamic duo of Gin and Gorm frameworks, topped off with CompileDaemon for seamless development. Dive into the world of RESTful APIs with me as I unravel the magic behind crafting this robust solution. Check out the link below for all the juicy details! 💻✨
+The todo-api project is a simple todoapp REST-API build using go programming language, gin - a go backend framework, GORM - a go database ORM, and docker. The aim of this project creation is for helping myself in order to understanding about go programming and it's implementation to backend system. You can also visit my frontend repository dedicated for complementing this project.
+
+[TodoApp Repository](https://github.com/aliftech/todoapp)
 
 ## Instalation
 

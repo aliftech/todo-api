@@ -12,6 +12,12 @@
 				{
 					"name": "Create Task",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{access_token}}"
+							}
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -23,13 +29,19 @@
 								}
 							}
 						},
-						"url": "http://localhost:3000/task"
+						"url": "{{url}}task"
 					},
 					"response": []
 				},
 				{
 					"name": "Update Task",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{access_token}}"
+							}
+						},
 						"method": "PUT",
 						"header": [],
 						"body": {
@@ -41,34 +53,53 @@
 								}
 							}
 						},
-						"url": "http://localhost:3000/task/1"
+						"url": "{{url}}task/1"
 					},
 					"response": []
 				},
 				{
 					"name": "Get All Tasks",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{access_token}}"
+							}
+						},
 						"method": "GET",
 						"header": [],
-						"url": "http://localhost:3000/task"
+						"url": "{{url}}task",
+						"description": "``` json\n{\n    \"data\": [\n        {\n            \"ID\": 2,\n            \"CreatedAt\": \"2024-07-20T20:59:43.692Z\",\n            \"UpdatedAt\": \"2024-07-20T20:59:43.692Z\",\n            \"DeletedAt\": null,\n            \"Userid\": 1,\n            \"Title\": \"Learning Golang\",\n            \"Description\": \"lorem ipsum dolor sit amet\",\n            \"Due\": \"2024-08-23\",\n            \"Status\": \"not started\"\n        },\n        {\n            \"ID\": 3,\n            \"CreatedAt\": \"2024-07-23T08:40:07.885Z\",\n            \"UpdatedAt\": \"2024-07-23T08:40:07.885Z\",\n            \"DeletedAt\": null,\n            \"Userid\": 1,\n            \"Title\": \"Learning Golang\",\n            \"Description\": \"lorem ipsum dolor sit amet\",\n            \"Due\": \"2024-08-23\",\n            \"Status\": \"not started\"\n        }\n    ],\n    \"error\": false,\n    \"message\": \"Get all user tasks.\"\n}\n ```"
 					},
 					"response": []
 				},
 				{
 					"name": "Get Task By ID",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{access_token}}"
+							}
+						},
 						"method": "GET",
 						"header": [],
-						"url": "http://localhost:3000/task/1"
+						"url": "{{url}}task/1"
 					},
 					"response": []
 				},
 				{
 					"name": "Delete Task",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{access_token}}"
+							}
+						},
 						"method": "DELETE",
 						"header": [],
-						"url": "http://localhost:3000/task/3"
+						"url": "{{url}}task/3"
 					},
 					"response": []
 				}
@@ -84,32 +115,88 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"test.signup@gmail.com\",\r\n    \"fullname\": \"Sigma\",\r\n    \"password\": \"kuda123\"\r\n}",
+							"raw": "{\r\n    \"email\": \"kuda@gmail.com\",\r\n    \"fullname\": \"Sigma\",\r\n    \"password\": \"aezakmi321\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": "http://localhost:3000/signup"
+						"url": "{{url}}signup"
 					},
 					"response": []
 				},
 				{
 					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Success\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.error).to.eql(false);\r",
+									"    if(jsonData.data.access_token) {\r",
+									"    pm.environment.set(\"access_token\", jsonData.data.access_token);\r",
+									"    pm.environment.set(\"refresh_token\", jsonData.data.refresh_token);\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"test.signup@gmail.com\",\r\n    \"password\": \"kuda123\"\r\n}",
+							"raw": "{\r\n    \"email\": \"kuda@gmail.com\",\r\n    \"password\": \"aezakmi321\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": "http://localhost:3000/login"
+						"url": "{{url}}login"
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Success\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.error).to.eql(false);\r",
+									"    if (jsonData.data.access_token) {\r",
+									"        pm.environment.set(\"access_token\", jsonData.data.access_token);\r",
+									"        pm.environment.set(\"refresh_token\", jsonData.data.refresh_token);\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"token\":\"{{refresh_token}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}refresh"
 					},
 					"response": []
 				}

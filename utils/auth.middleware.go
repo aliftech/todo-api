@@ -12,9 +12,9 @@ import (
 )
 
 func ValidateAuth(c *gin.Context) {
-	// Get the cookie from the request
-	tokenString, err := c.Cookie("Authorization")
-	if err != nil {
+	// Get the token from the Authorization header
+	authHeader := c.GetHeader("Authorization")
+	if authHeader == "" {
 		c.JSON(http.StatusUnauthorized, gin.H{
 			"error":   true,
 			"message": "Unauthorized: No token provided.",
@@ -22,6 +22,19 @@ func ValidateAuth(c *gin.Context) {
 		c.Abort()
 		return
 	}
+
+	// Check if the token starts with "Bearer "
+	const bearerPrefix = "Bearer "
+	if len(authHeader) <= len(bearerPrefix) || authHeader[:len(bearerPrefix)] != bearerPrefix {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"error":   true,
+			"message": "Unauthorized: Invalid token format.",
+		})
+		c.Abort()
+		return
+	}
+
+	tokenString := authHeader[len(bearerPrefix):]
 
 	// Decode and validate the token
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
@@ -38,7 +51,7 @@ func ValidateAuth(c *gin.Context) {
 
 		return []byte(secret), nil
 	})
-	fmt.Print(err)
+
 	if err != nil || !token.Valid {
 		c.JSON(http.StatusUnauthorized, gin.H{
 			"error":   true,
@@ -51,7 +64,8 @@ func ValidateAuth(c *gin.Context) {
 	// Extract claims and validate them
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		// Check token expiration
-		if float64(time.Now().Unix()) > claims["expired"].(float64) {
+		exp, ok := claims["expired"].(float64)
+		if !ok || float64(time.Now().Unix()) > exp {
 			c.JSON(http.StatusUnauthorized, gin.H{
 				"error":   true,
 				"message": "Unauthorized: Token has expired.",

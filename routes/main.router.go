@@ -22,6 +22,7 @@ func MainRouter() {
 	// Auth Router
 	r.POST("/signup", controllers.Signup)
 	r.POST("/login", controllers.Login)
+	r.POST("/refresh", controllers.Refresh)
 
 	// Task Router
 	r.GET("/task", utils.ValidateAuth, controllers.GetTask)

@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 	"os"
 	"time"
@@ -111,29 +112,142 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	// Generate a JWT token
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+	// Generate access token
+	accessToken := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"sub":     user.ID,
-		"expired": time.Now().Add(time.Hour * 24 * 30).Unix(), // 30 days
+		"expired": time.Now().Add(time.Hour * 1).Unix(), // 1 hour
 	})
 
-	// Sign and get the complete encoded token as a string using the secret
-	tokenString, err := token.SignedString([]byte(os.Getenv("jwt.secret")))
+	accessTokenString, err := accessToken.SignedString([]byte(os.Getenv("jwt.secret")))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error":   true,
-			"message": "Failed to create token",
+			"message": "Failed to create access token",
 			"data":    nil,
 		})
 		return
 	}
 
-	// Set the cookie with the JWT token
-	c.SetSameSite(http.SameSiteLaxMode)
-	c.SetCookie("Authorization", tokenString, 3600*24*30, "", "", false, true)
+	// Generate refresh token
+	refreshToken := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"sub":     user.ID,
+		"expired": time.Now().Add(time.Hour * 24 * 30).Unix(), // 30 days
+	})
+
+	refreshTokenString, err := refreshToken.SignedString([]byte(os.Getenv("jwt.secret")))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error":   true,
+			"message": "Failed to create refresh token",
+			"data":    nil,
+		})
+		return
+	}
+
+	// Return the tokens in the response body
 	c.JSON(http.StatusOK, gin.H{
 		"error":   false,
 		"message": "Login Success.",
-		"data":    nil,
+		"data": gin.H{
+			"access_token":  accessTokenString,
+			"refresh_token": refreshTokenString,
+		},
 	})
+}
+
+func Refresh(c *gin.Context) {
+	// Get the refresh token from the request body
+	var body struct {
+		Token string `binding:"required"`
+	}
+
+	if err := c.ShouldBindJSON(&body); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error":   true,
+			"message": "Failed to read request body",
+		})
+		return
+	}
+
+	// Parse and validate the refresh token
+	refreshToken, err := jwt.Parse(body.Token, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+		}
+
+		secret := os.Getenv("jwt.secret")
+		if secret == "" {
+			return nil, fmt.Errorf("JWT secret key is not set in the environment variables")
+		}
+
+		return []byte(secret), nil
+	})
+
+	if err != nil || !refreshToken.Valid {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"error":   true,
+			"message": "Unauthorized: Invalid refresh token.",
+		})
+		return
+	}
+
+	// Extract claims and validate them
+	if claims, ok := refreshToken.Claims.(jwt.MapClaims); ok && refreshToken.Valid {
+		// Check token expiration
+		exp, ok := claims["expired"].(float64)
+		if !ok || float64(time.Now().Unix()) > exp {
+			c.JSON(http.StatusUnauthorized, gin.H{
+				"error":   true,
+				"message": "Unauthorized: Refresh token has expired.",
+			})
+			return
+		}
+
+		// Generate new access token
+		accessToken := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+			"sub":     claims["sub"],
+			"expired": time.Now().Add(time.Hour * 1).Unix(), // 1 hour
+		})
+
+		accessTokenString, err := accessToken.SignedString([]byte(os.Getenv("jwt.secret")))
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error":   true,
+				"message": "Failed to create access token",
+				"data":    nil,
+			})
+			return
+		}
+
+		// Generate new refresh token
+		refreshToken := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+			"sub":     claims["sub"],
+			"expired": time.Now().Add(time.Hour * 24 * 30).Unix(), // 30 days
+		})
+
+		refreshTokenString, err := refreshToken.SignedString([]byte(os.Getenv("jwt.secret")))
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error":   true,
+				"message": "Failed to create refresh token",
+				"data":    nil,
+			})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{
+			"error":   false,
+			"message": "Token refreshed successfully.",
+			"data": gin.H{
+				"access_token":  accessTokenString,
+				"refresh_token": refreshTokenString,
+			},
+		})
+	} else {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"error":   true,
+			"message": "Unauthorized: Invalid token claims.",
+		})
+		return
+	}
 }

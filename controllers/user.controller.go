@@ -17,15 +17,15 @@ import (
 func Signup(c *gin.Context) {
 	// Get email and password of req body
 	var body struct {
-		Email    string
-		Fullname string
-		Password string
+		Email    string `form:"email" json:"email" binding:"required,email"`
+		Fullname string `form:"fullname" json:"fullname" binding:"required"`
+		Password string `form:"password" json:"password" binding:"required"`
 	}
 
 	if c.Bind(&body) != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error":   true,
-			"message": "Failed to read request body",
+			"message": "Invalid request value.",
 			"data":    nil,
 		})
 
@@ -78,7 +78,8 @@ func Login(c *gin.Context) {
 	if err := c.ShouldBindJSON(&body); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error":   true,
-			"message": "Failed to read request body",
+			"message": "Invalid request value.",
+			"data":    nil,
 		})
 		return
 	}
@@ -164,7 +165,8 @@ func Refresh(c *gin.Context) {
 	if err := c.ShouldBindJSON(&body); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error":   true,
-			"message": "Failed to read request body",
+			"message": "Invalid request value.",
+			"data":    nil,
 		})
 		return
 	}
@@ -187,6 +189,7 @@ func Refresh(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, gin.H{
 			"error":   true,
 			"message": "Unauthorized: Invalid refresh token.",
+			"data":    nil,
 		})
 		return
 	}
@@ -199,6 +202,7 @@ func Refresh(c *gin.Context) {
 			c.JSON(http.StatusUnauthorized, gin.H{
 				"error":   true,
 				"message": "Unauthorized: Refresh token has expired.",
+				"data":    nil,
 			})
 			return
 		}
@@ -247,6 +251,7 @@ func Refresh(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, gin.H{
 			"error":   true,
 			"message": "Unauthorized: Invalid token claims.",
+			"data":    nil,
 		})
 		return
 	}

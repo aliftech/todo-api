@@ -23,10 +23,10 @@ func CreateTask(c *gin.Context) {
 
 	// Bind and validate the request body
 	var taskRequest struct {
-		Title       string
-		Description string
-		Due         string
-		Status      string
+		Title       string `form:"title" json:"title" binding:"required"`
+		Description string `form:"description" json:"description" binding:"required"`
+		Due         string `form:"due" json:"due" binding:"required"`
+		Status      string `form:"status" json:"status" binding:"required"`
 	}
 
 	if err := c.ShouldBindJSON(&taskRequest); err != nil {
@@ -185,10 +185,19 @@ func UpdateTask(c *gin.Context) {
 
 	// Get data from the request body
 	var task_request struct {
-		Title       string
-		Description string
-		Due         string
-		Status      string
+		Title       string `form:"title" json:"title" binding:"required"`
+		Description string `form:"description" json:"description" binding:"required"`
+		Due         string `form:"due" json:"due" binding:"required"`
+		Status      string `form:"status" json:"status" binding:"required"`
+	}
+
+	if err := c.ShouldBindJSON(&task_request); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error":   true,
+			"message": "Invalid request value.",
+			"data":    nil,
+		})
+		return
 	}
 
 	c.Bind(&task_request)

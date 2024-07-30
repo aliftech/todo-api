@@ -41,5 +41,7 @@ COPY --from=builder /todo/bin/main .
 # Copy the .env file
 COPY --from=builder /todo/env .env
 
+EXPOSE 3000
+
 # Run executable
 CMD ["./main"]

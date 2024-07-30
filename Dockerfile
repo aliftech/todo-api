@@ -26,7 +26,5 @@ FROM scratch
 COPY --from=builder /todo/bin/main .
 COPY --from=builder /todo/env .env
 
-EXPOSE 3000
-
 # Run executable
 CMD ["./main"]

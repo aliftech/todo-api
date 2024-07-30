@@ -7,6 +7,6 @@ steps:
       - "-c"
       - |
         gcloud auth configure-docker
-        gcloud builds submit --tag gcr.io/todoapp-431001/todo-api .
+        gcloud run deploy todo-api --image gcr.io/todoapp-431001/todo-api --platform managed --region us-central1 --allow-unauthenticated
 images:
   - "gcr.io/todoapp-431001/todo-api"

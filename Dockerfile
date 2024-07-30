@@ -1,44 +1,26 @@
-# Start from golang base image
+# Start from Golang base image
 FROM golang:alpine as builder
 
-# Enable go modules
-ENV GO111MODULE=on
-
-# Install git. (alpine image does not have git in it)
+# Install git
 RUN apk update && apk add --no-cache git
 
-# Set current working directory
+# Set working directory
 WORKDIR /todo
 
-# Note here: To avoid downloading dependencies every time we
-# build image. Here, we are caching all the dependencies by
-# first copying go.mod and go.sum files and downloading them,
-# to be used every time we build the image if the dependencies
-# are not changed.
-
-# Copy go mod and sum files
+# Copy and download dependencies
 COPY go.mod ./
 COPY go.sum ./
-
-# Download all dependencies.
 RUN go mod download
 
-# Now, copy the source code
+# Copy source code and build
 COPY . .
-
-# Note here: CGO_ENABLED is disabled for cross system compilation
-# It is also a common best practise.
-
-# Build the application.
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o ./bin/main .
 
-# Finally our multi-stage to build a small image
 # Start a new stage from scratch
 FROM scratch
 
-# Copy the Pre-built binary file
+# Copy binary and .env file
 COPY --from=builder /todo/bin/main .
-# Copy the .env file
 COPY --from=builder /todo/env .env
 
 EXPOSE 3000

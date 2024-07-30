@@ -1,0 +1,12 @@
+steps:
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["build", "-t", "gcr.io/todoapp-431001/todo-api", "."]
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk:slim"
+    entrypoint: "bash"
+    args:
+      - "-c"
+      - |
+        gcloud auth configure-docker
+        gcloud builds submit --tag gcr.io/todoapp-431001/todo-api .
+images:
+  - "gcr.io/todoapp-431001/todo-api"

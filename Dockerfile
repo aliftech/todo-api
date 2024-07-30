@@ -1,6 +1,9 @@
 # Start from Golang base image
 FROM golang:alpine as builder
 
+# Enable go modules
+ENV GO111MODULE=on
+
 # Install git
 RUN apk update && apk add --no-cache git
 

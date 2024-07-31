@@ -53,3 +53,25 @@ CompileDaemon -command="./todo-api"
 ```bash
 docker compose up
 ```
+
+## Deployment
+
+```bash
+gcloud auth login
+```
+
+```bash
+gcloud config set project todoapp-431001
+```
+
+```bash
+gcloud auth configure-docker
+```
+
+```bash
+docker buildx build --platform linux/amd64 -t gcr.io/todoapp-431001/todoapp-api:1.0 .
+```
+
+```bash
+docker push gcr.io/todoapp-431001/todoapp-api:1.0
+```

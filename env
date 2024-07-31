@@ -1,3 +1,3 @@
 PORT=3000
-DB="wahyouka:hesoyam8890009!@tcp(34.45.180.232:3306)/todoapp_db?charset=utf8mb4&parseTime=True&loc=Local"
+DB="wahyouka:hesoyam8890009!@tcp(tcp:todoapp-431001:us-central1:todoapp-db)/todoapp_db?charset=utf8mb4&parseTime=True&loc=Local"
 jwt.secret=kkLLJSii78ooo)*9799))**Sjk

@@ -39,7 +39,9 @@ FROM scratch
 # Copy the Pre-built binary file
 COPY --from=builder /todo/bin/main .
 # Copy the .env file
-COPY --from=builder /todo/env .env
+COPY --from=builder /todo/.env .env
+
+EXPOSE 3000
 
 # Run executable
-CMD ["./main"]
+CMD ["./main", ":3000"]
